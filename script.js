@@ -26,19 +26,29 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   return section;
 };
 
-const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+// const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
 };
 
-const createCartItemElement = ({ sku, name, salePrice }) => {
+const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 };
+
+async function addItemCar(event) {
+  const alvo = event.target;
+  const idProduto = alvo.parentElement.firstChild.innerText;
+  const carrinho = document.querySelector('.cart__items');
+
+  const itemAdd = await fetchItem(idProduto);
+  console.log(itemAdd);
+  carrinho.appendChild(createCartItemElement(itemAdd));
+}
 
 async function montaListaProdutos() {
   const dados = await fetchProducts('computador');
@@ -51,6 +61,13 @@ async function montaListaProdutos() {
   });
 }
 
-window.onload = () => {
-  montaListaProdutos();
+function montaEventoBtnAddCarrinho() {
+  const btnAddCarrinho = document.querySelectorAll('.item__add');
+
+  btnAddCarrinho.forEach((btn) => btn.addEventListener('click', addItemCar));
+}
+
+window.onload = async () => {
+  await montaListaProdutos();
+  montaEventoBtnAddCarrinho();
 };
