@@ -45,7 +45,7 @@ async function montaListaProdutos() {
   const telaProdutos = document.querySelector('.items');
   
   console.log(dados.results);
-  dados.results.forEach((item, index) => {
+  dados.results.forEach((item) => {
     const produto = createProductItemElement(item);
 
     telaProdutos.appendChild(produto);
