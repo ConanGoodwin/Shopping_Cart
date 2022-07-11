@@ -30,6 +30,8 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
+  const pai = event.target.parentElement;
+  pai.removeChild(event.target);
 };
 
 const createCartItemElement = ({ id, title, price }) => {
@@ -46,8 +48,8 @@ async function addItemCar(event) {
   const carrinho = document.querySelector('.cart__items');
 
   const itemAdd = await fetchItem(idProduto);
-  console.log(itemAdd);
   carrinho.appendChild(createCartItemElement(itemAdd));
+  carrinho.lastChild.addEventListener('click', cartItemClickListener);
 }
 
 async function montaListaProdutos() {
@@ -69,5 +71,5 @@ function montaEventoBtnAddCarrinho() {
 
 window.onload = async () => {
   await montaListaProdutos();
-  montaEventoBtnAddCarrinho();
+  await montaEventoBtnAddCarrinho();
 };
