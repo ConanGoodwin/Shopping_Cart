@@ -44,7 +44,6 @@ async function montaListaProdutos() {
   const dados = await fetchProducts('computador');
   const telaProdutos = document.querySelector('.items');
   
-  console.log(dados.results);
   dados.results.forEach((item) => {
     const produto = createProductItemElement(item);
 
