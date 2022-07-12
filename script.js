@@ -1,4 +1,10 @@
+// const saveCartItems = require("./helpers/saveCartItems");
+// const getSavedCartItems = require("./helpers/getSavedCartItems");
+
+// const getSavedCartItems = require("./helpers/getSavedCartItems");
+
 // const { fetchProducts } = require("./helpers/fetchProducts");
+const classeCarrinho = '.cart__items';
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -30,8 +36,11 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
+  const carrinho = document.querySelector(classeCarrinho);
   const pai = event.target.parentElement;
+
   pai.removeChild(event.target);
+  saveCartItems(carrinho);
 };
 
 const createCartItemElement = ({ id, title, price }) => {
@@ -45,11 +54,12 @@ const createCartItemElement = ({ id, title, price }) => {
 async function addItemCar(event) {
   const alvo = event.target;
   const idProduto = alvo.parentElement.firstChild.innerText;
-  const carrinho = document.querySelector('.cart__items');
+  const carrinho = document.querySelector(classeCarrinho);
 
   const itemAdd = await fetchItem(idProduto);
   carrinho.appendChild(createCartItemElement(itemAdd));
   carrinho.lastChild.addEventListener('click', cartItemClickListener);
+  saveCartItems(carrinho);
 }
 
 async function montaListaProdutos() {
@@ -69,7 +79,19 @@ function montaEventoBtnAddCarrinho() {
   btnAddCarrinho.forEach((btn) => btn.addEventListener('click', addItemCar));
 }
 
+async function montaCarrinho() {
+  const parent = document.querySelector('.cart__items').parentNode;
+  const newList = getSavedCartItems();
+  parent.innerHTML = newList;
+  const lisCarrinho = document.getElementsByClassName('cart__items');
+
+  for (let index = 0; index < lisCarrinho.length; index += 1) {
+    lisCarrinho[index].addEventListener('click', cartItemClickListener);
+  }
+}
+
 window.onload = async () => {
   await montaListaProdutos();
+  await montaCarrinho();
   await montaEventoBtnAddCarrinho();
 };

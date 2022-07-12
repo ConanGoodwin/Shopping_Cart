@@ -1,6 +1,7 @@
 const saveCartItems = (carrinho) => {
   // seu código aqui
-  localStorage.setItem('cartItems', carrinho);
+  console.log('oi');
+  localStorage.setItem('cartItems', carrinho.outerHTML);
 };
 
 if (typeof module !== 'undefined') {
