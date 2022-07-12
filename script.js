@@ -5,6 +5,7 @@
 
 // const { fetchProducts } = require("./helpers/fetchProducts");
 const classeCarrinho = '.cart__items';
+const carrinho = document.querySelector(classeCarrinho);
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -36,7 +37,6 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
-  const carrinho = document.querySelector(classeCarrinho);
   const pai = event.target.parentElement;
 
   pai.removeChild(event.target);
@@ -54,7 +54,6 @@ const createCartItemElement = ({ id, title, price }) => {
 async function addItemCar(event) {
   const alvo = event.target;
   const idProduto = alvo.parentElement.firstChild.innerText;
-  const carrinho = document.querySelector(classeCarrinho);
 
   const itemAdd = await fetchItem(idProduto);
   carrinho.appendChild(createCartItemElement(itemAdd));
@@ -80,10 +79,9 @@ function montaEventoBtnAddCarrinho() {
 }
 
 async function montaCarrinho() {
-  const parent = document.querySelector('.cart__items').parentNode;
   const newList = getSavedCartItems();
-  parent.innerHTML = newList;
-  const lisCarrinho = document.getElementsByClassName('cart__items');
+  carrinho.innerHTML = newList;
+  const lisCarrinho = document.getElementsByClassName('cart__item');
 
   for (let index = 0; index < lisCarrinho.length; index += 1) {
     lisCarrinho[index].addEventListener('click', cartItemClickListener);
@@ -94,4 +92,5 @@ window.onload = async () => {
   await montaListaProdutos();
   await montaCarrinho();
   await montaEventoBtnAddCarrinho();
+  // localStorage.setItem('cartItems', '');
 };
