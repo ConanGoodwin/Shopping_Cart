@@ -6,6 +6,7 @@
 // const { fetchProducts } = require("./helpers/fetchProducts");
 const classeCarrinho = '.cart__items';
 const carrinho = document.querySelector(classeCarrinho);
+const btnLimparCarrinho = document.querySelector('.empty-cart');
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -92,5 +93,9 @@ window.onload = async () => {
   await montaListaProdutos();
   await montaCarrinho();
   await montaEventoBtnAddCarrinho();
+  btnLimparCarrinho.addEventListener('click', () => {
+    carrinho.innerHTML = '';
+    saveCartItems(carrinho);
+  });
   // localStorage.setItem('cartItems', '');
 };
