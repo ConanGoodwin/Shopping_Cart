@@ -1,6 +1,7 @@
 const classeCarrinho = '.cart__items';
 const carrinho = document.querySelector(classeCarrinho);
 const btnLimparCarrinho = document.querySelector('.empty-cart');
+const teste = document.getElementById('teste');
 let precosCarrinho = [];
 
 const createProductImageElement = (imageSource) => {
@@ -35,25 +36,31 @@ const totalizaCarrinho = () => {
   const totalCarrinho = document.querySelector('.total-price');
 
   totalCarrinho.innerText = precosCarrinho.reduce((acc, curr) => acc + parseFloat(curr), 0);
+  teste.innerText = precosCarrinho;
+};
+
+const formataTextoLi = (texto) => {
+  let objeto = texto.split(' ');
+  objeto = objeto[objeto.length - 1].replace('$', '');
+  return objeto;
 };
 
 const remArrayPrecos = (texto) => {
-  precosCarrinho.splice(precosCarrinho.indexOf(texto), 1);
+  if (precosCarrinho.indexOf(texto) > -1) precosCarrinho.splice(precosCarrinho.indexOf(texto), 1);
 };
 
-const cartItemClickListener = (event) => {
+const cartItemClickListener = async (event) => {
   // coloque seu código aqui
   const pai = event.target.parentElement;
 
+  await remArrayPrecos(formataTextoLi(event.target.innerText));
+  await totalizaCarrinho();
   pai.removeChild(event.target);
-  remArrayPrecos(event.target.innerText);
-  totalizaCarrinho();
   saveCartItems(carrinho);
 };
 
 const addArrayPrecos = (texto) => {
-  let objeto = texto.split(' ');
-  objeto = objeto[objeto.length - 1].replace('$', '');
+  objeto = formataTextoLi(texto);
   precosCarrinho.push(objeto);
 };
 
