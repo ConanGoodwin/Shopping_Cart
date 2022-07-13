@@ -140,6 +140,26 @@ body {
   overflow-y: scroll;
 }
 
+.cart__items li {
+  display: flex;
+}
+
+.cart__items li div {
+  display: flex;
+  vertical-align: middle;
+}
+
+.cartItem {
+  flex-direction: column;
+  width: 90%;
+  margin: 0;
+}
+
+.dellItem {
+  align-items: center;
+  width: 10%;
+}
+
 .empty-cart {
   width: 170px;
   height: 35px;

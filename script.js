@@ -6,6 +6,7 @@
 // const { fetchProducts } = require("./helpers/fetchProducts");
 const classeCarrinho = '.cart__items';
 const carrinho = document.querySelector(classeCarrinho);
+const btnLimparCarrinho = document.querySelector('.empty-cart');
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -35,19 +36,34 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 // const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
+const totalCarrinho = () => {
+
+};
+
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
-  const pai = event.target.parentElement;
+  if (event.target.className !== 'price') {
+    const li = event.target.parentElement;
+    const pai = li.parentElement;
 
-  pai.removeChild(event.target);
-  saveCartItems(carrinho);
+    pai.removeChild(li);
+    saveCartItems(carrinho);
+  }
 };
 
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
+  const divItem = document.createElement('div');
+  const divDellItem = document.createElement('div');
+
   li.className = 'cart__item';
-  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
+  divItem.className = 'cartItem';
+  divItem.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: R$<span class='price'>${price}</span>`;
+  li.appendChild(divItem);
+  divDellItem.className = 'dellItem';
+  divDellItem.innerText = 'X';
+  divDellItem.addEventListener('click', cartItemClickListener);
+  li.appendChild(divDellItem);
   return li;
 };
 
@@ -57,7 +73,6 @@ async function addItemCar(event) {
 
   const itemAdd = await fetchItem(idProduto);
   carrinho.appendChild(createCartItemElement(itemAdd));
-  carrinho.lastChild.addEventListener('click', cartItemClickListener);
   saveCartItems(carrinho);
 }
 
@@ -81,7 +96,7 @@ function montaEventoBtnAddCarrinho() {
 async function montaCarrinho() {
   const newList = getSavedCartItems();
   carrinho.innerHTML = newList;
-  const lisCarrinho = document.getElementsByClassName('cart__item');
+  const lisCarrinho = document.getElementsByClassName('dellItem');
 
   for (let index = 0; index < lisCarrinho.length; index += 1) {
     lisCarrinho[index].addEventListener('click', cartItemClickListener);
@@ -92,5 +107,11 @@ window.onload = async () => {
   await montaListaProdutos();
   await montaCarrinho();
   await montaEventoBtnAddCarrinho();
+  btnLimparCarrinho.addEventListener('click', () => {
+    const spanTotal = document.getElementById('total');
+    carrinho.innerHTML = '';
+    spanTotal.innerText = '0,00';
+    saveCartItems(carrinho);
+  });
   // localStorage.setItem('cartItems', '');
 };
