@@ -36,14 +36,12 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 // const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const totalCarrinho = () => {
-
-};
-
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
+  console.log(event.target);
+
   if (event.target.className !== 'price') {
-    const li = event.target.parentElement;
+    const li = event.target;
     const pai = li.parentElement;
 
     pai.removeChild(li);
@@ -53,17 +51,10 @@ const cartItemClickListener = (event) => {
 
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
-  const divItem = document.createElement('div');
-  const divDellItem = document.createElement('div');
 
   li.className = 'cart__item';
-  divItem.className = 'cartItem';
-  divItem.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: R$<span class='price'>${price}</span>`;
-  li.appendChild(divItem);
-  divDellItem.className = 'dellItem';
-  divDellItem.innerText = 'X';
-  divDellItem.addEventListener('click', cartItemClickListener);
-  li.appendChild(divDellItem);
+  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: R$<span class='price'>${price}</span>`;
+  li.addEventListener('click', cartItemClickListener);
   return li;
 };
 
@@ -73,6 +64,7 @@ async function addItemCar(event) {
 
   const itemAdd = await fetchItem(idProduto);
   carrinho.appendChild(createCartItemElement(itemAdd));
+  // carrinho.lastChild.addEventListener('click', cartItemClickListener);
   saveCartItems(carrinho);
 }
 
@@ -96,7 +88,7 @@ function montaEventoBtnAddCarrinho() {
 async function montaCarrinho() {
   const newList = getSavedCartItems();
   carrinho.innerHTML = newList;
-  const lisCarrinho = document.getElementsByClassName('dellItem');
+  const lisCarrinho = document.getElementsByClassName('cart__item');
 
   for (let index = 0; index < lisCarrinho.length; index += 1) {
     lisCarrinho[index].addEventListener('click', cartItemClickListener);
@@ -108,9 +100,7 @@ window.onload = async () => {
   await montaCarrinho();
   await montaEventoBtnAddCarrinho();
   btnLimparCarrinho.addEventListener('click', () => {
-    const spanTotal = document.getElementById('total');
     carrinho.innerHTML = '';
-    spanTotal.innerText = '0,00';
     saveCartItems(carrinho);
   });
   // localStorage.setItem('cartItems', '');
