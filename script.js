@@ -1,6 +1,7 @@
 const classeCarrinho = '.cart__items';
 const carrinho = document.querySelector(classeCarrinho);
 const btnLimparCarrinho = document.querySelector('.empty-cart');
+let precosCarrinho = [];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -30,12 +31,30 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 // const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
+const totalizaCarrinho = () => {
+  const totalCarrinho = document.querySelector('.total-price');
+
+  totalCarrinho.innerText = precosCarrinho.reduce((acc, curr) => acc + parseFloat(curr), 0);
+};
+
+const remArrayPrecos = (texto) => {
+  precosCarrinho.splice(precosCarrinho.indexOf(texto), 1);
+};
+
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
   const pai = event.target.parentElement;
 
   pai.removeChild(event.target);
+  remArrayPrecos(event.target.innerText);
+  totalizaCarrinho();
   saveCartItems(carrinho);
+};
+
+const addArrayPrecos = (texto) => {
+  let objeto = texto.split(' ');
+  objeto = objeto[objeto.length - 1].replace('$', '');
+  precosCarrinho.push(objeto);
 };
 
 const createCartItemElement = ({ id, title, price }) => {
@@ -44,6 +63,7 @@ const createCartItemElement = ({ id, title, price }) => {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  addArrayPrecos(li.innerText);
 
   return li;
 };
@@ -54,6 +74,7 @@ async function addItemCar(event) {
   const itemAdd = await fetchItem(idProduto);
 
   carrinho.appendChild(createCartItemElement(itemAdd));
+  totalizaCarrinho();
   saveCartItems(carrinho);
 }
 
@@ -76,12 +97,12 @@ function montaEventoBtnAddCarrinho() {
 
 async function montaCarrinho() {
   const newList = getSavedCartItems();
-  console.log(newList);
   carrinho.innerHTML = newList;
   const lisCarrinho = document.getElementsByClassName('cart__item');
 
   for (let index = 0; index < lisCarrinho.length; index += 1) {
     lisCarrinho[index].addEventListener('click', cartItemClickListener);
+    addArrayPrecos(lisCarrinho[index].innerText);
   }
 }
 
@@ -91,6 +112,9 @@ window.onload = async () => {
   await montaEventoBtnAddCarrinho();
   btnLimparCarrinho.addEventListener('click', () => {
     carrinho.innerHTML = '';
+    precosCarrinho = [];
+    totalizaCarrinho();
     saveCartItems(carrinho);
   });
+  totalizaCarrinho();
 };
