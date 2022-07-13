@@ -9,8 +9,8 @@ const carrinho = document.querySelector(classeCarrinho);
 const btnLimparCarrinho = document.querySelector('.empty-cart');
 
 const createProductImageElement = (imageSource) => {
-  const img = document.createElement('img');
-  img.className = 'item__image';
+  const img = document.createElement("img");
+  img.className = "item__image";
   img.src = imageSource;
   return img;
 };
@@ -24,8 +24,8 @@ const createCustomElement = (element, className, innerText) => {
 
 const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
-  section.className = 'item';
 
+  section.className = 'item';
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
@@ -38,31 +38,27 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
-  console.log(event.target);
+  const pai = event.target.parentElement;
 
-  if (event.target.className !== 'price') {
-    const li = event.target;
-    const pai = li.parentElement;
-
-    pai.removeChild(li);
-    saveCartItems(carrinho);
-  }
+  pai.removeChild(event.target);
+  saveCartItems(carrinho);
 };
 
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
 
   li.className = 'cart__item';
-  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: R$<span class='price'>${price}</span>`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+
   return li;
 };
 
 async function addItemCar(event) {
   const alvo = event.target;
   const idProduto = alvo.parentElement.firstChild.innerText;
-
   const itemAdd = await fetchItem(idProduto);
+
   carrinho.appendChild(createCartItemElement(itemAdd));
   // carrinho.lastChild.addEventListener('click', cartItemClickListener);
   saveCartItems(carrinho);
@@ -71,7 +67,7 @@ async function addItemCar(event) {
 async function montaListaProdutos() {
   const dados = await fetchProducts('computador');
   const telaProdutos = document.querySelector('.items');
-  
+
   dados.results.forEach((item) => {
     const produto = createProductItemElement(item);
 
