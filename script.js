@@ -33,7 +33,7 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
   const pai = event.target.parentElement;
-  
+
   pai.removeChild(event.target);
   saveCartItems(carrinho);
 };
@@ -42,7 +42,7 @@ const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
 
   li.className = 'cart__item';
-  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: R$ ${price}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
 
   return li;
