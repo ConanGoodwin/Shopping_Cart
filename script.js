@@ -32,19 +32,15 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
-  if (event.target.className !== 'price') {
-    const pai = event.target.parentElement;
-
-    pai.removeChild(event.target);
-    saveCartItems(carrinho);
-  }
+  carrinho.removeChild(event.target);
+  saveCartItems(carrinho);
 };
 
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
 
   li.className = 'cart__item';
-  li.innerHTML = `SKU: ${id} | NAME: ${title} | PRICE: R$<span class='price'>${price}</span>`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: R$ ${price}`;
   li.addEventListener('click', cartItemClickListener);
 
   return li;
