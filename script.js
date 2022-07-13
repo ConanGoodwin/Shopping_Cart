@@ -32,7 +32,9 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
-  carrinho.removeChild(event.target);
+  const pai = event.target.parentElement;
+  
+  pai.removeChild(event.target);
   saveCartItems(carrinho);
 };
 
@@ -74,6 +76,7 @@ function montaEventoBtnAddCarrinho() {
 
 async function montaCarrinho() {
   const newList = getSavedCartItems();
+  console.log(newList);
   carrinho.innerHTML = newList;
   const lisCarrinho = document.getElementsByClassName('cart__item');
 
