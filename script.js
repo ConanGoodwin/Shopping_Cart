@@ -1,7 +1,6 @@
 const classeCarrinho = '.cart__items';
 const carrinho = document.querySelector(classeCarrinho);
 const btnLimparCarrinho = document.querySelector('.empty-cart');
-const teste = document.getElementById('teste');
 let precosCarrinho = [];
 
 const createProductImageElement = (imageSource) => {
@@ -36,7 +35,6 @@ const totalizaCarrinho = () => {
   const totalCarrinho = document.querySelector('.total-price');
 
   totalCarrinho.innerText = precosCarrinho.reduce((acc, curr) => acc + parseFloat(curr), 0);
-  teste.innerText = precosCarrinho;
 };
 
 const formataTextoLi = (texto) => {
