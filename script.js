@@ -84,7 +84,9 @@ async function addItemCar(event) {
 }
 
 async function montaListaProdutos() {
+  const carregando = document.querySelector('.loading');
   const dados = await fetchProducts('computador');
+  carregando.parentElement.removeChild(carregando);
   const telaProdutos = document.querySelector('.items');
 
   dados.results.forEach((item) => {
